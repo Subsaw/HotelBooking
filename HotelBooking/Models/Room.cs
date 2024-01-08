@@ -2,12 +2,10 @@
 {
     public class Room
     {
-        public int Id { get; set; }
-
-        public int NumOfPeople { get; set; }
-
-        public float Metric { get; set; }
-
+        public int RoomID { get; set; }
+        public string RoomNumber { get; set; }
+        public string RoomType { get; set; }
         public string Description { get; set; }
+        public int PricePerNight { get; set; }
     }
 }

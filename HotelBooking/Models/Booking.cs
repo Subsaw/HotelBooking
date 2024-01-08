@@ -5,11 +5,14 @@ namespace HotelBooking.Models
 {
     public class Booking
     {
-        public int Id { get; set; }
+        public int BookingID { get; set; }
+        public int RoomID { get; set; }
+        public string GuestName { get; set; }
+        public DateTime CheckInDate { get; set; }
+        public DateTime CheckOutDate { get; set; }
+        public decimal TotalPrice { get; set; }
 
-        public virtual Room Room { get; set; }
-
-
+        public Room Room { get; set; }
 
     }
 }
