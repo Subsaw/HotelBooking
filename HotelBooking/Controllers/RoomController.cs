@@ -1,30 +1,29 @@
 ﻿using HotelBooking.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Diagnostics;
 
 namespace HotelBooking.Controllers
 {
     public class RoomController : Controller
     {
-        private static List<Room> list = new()
+        private readonly AppDbContext _context;
+        public RoomController(AppDbContext context)
         {
-            new Room { RoomID = 1, RoomNumber = "504", RoomType = "Single", Description = "Alalsdl", PricePerNight = 50},
-            new Room { RoomID = 2, RoomNumber = "104", RoomType = "Single", Description = "ASdkaskdkasd", PricePerNight = 60},
-            new Room { RoomID = 3, RoomNumber = "28", RoomType = "Double", Description = "AJKshdajhsd", PricePerNight = 90},
-            new Room { RoomID = 4, RoomNumber = "128", RoomType = "Double", Description = "ASIDJOQIWD", PricePerNight = 120},
-            new Room { RoomID = 5, RoomNumber = "198", RoomType = "Triple", Description = "JAHSdKAJSdoAOIJS", PricePerNight = 160}
-        };
+            _context = context;
+        }
 
         // GET: RoomController
         public ActionResult Index()
         {
-            return View(list);
+            return View(_context.Rooms);
         }
 
         // GET: RoomController/Details/5
         public ActionResult Details(int id)
         {
-            return View(list.FirstOrDefault(x => x.RoomID == id));
+            return View(_context.Rooms.Find(id));
         }
 
         // GET: RoomController/Create
@@ -38,15 +37,15 @@ namespace HotelBooking.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Room room)
         {
-                room.RoomID = list.Count + 1;
-                list.Add(room);
+                _context.Rooms.Add(room);
+                _context.SaveChanges();
                 return RedirectToAction("Index");   
         }
 
         // GET: RoomController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View(list.FirstOrDefault(x => x.RoomID == id));
+            return View(_context.Rooms.Find(id));
         }
 
         // POST: RoomController/Edit/5
@@ -54,11 +53,14 @@ namespace HotelBooking.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, Room room)
         {
-            Room room1 = list.FirstOrDefault(x => x.RoomID == id);
-            room1.RoomNumber = room.RoomNumber;
-            room1.RoomType = room.RoomType;
-            room1.Description = room.Description;
-            room1.PricePerNight = room.PricePerNight;
+            var RoomForEdit = _context.Rooms.Find(id);
+            RoomForEdit.RoomNumber = room.RoomNumber;
+            RoomForEdit.RoomType = room.RoomType;
+            RoomForEdit.Description = room.Description;
+            RoomForEdit.PricePerNight = room.PricePerNight;
+
+            _context.Update(RoomForEdit);
+            _context.SaveChanges();
 
             return RedirectToAction("Index");
         }
@@ -66,7 +68,7 @@ namespace HotelBooking.Controllers
         // GET: RoomController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View(list.FirstOrDefault(x => x.RoomID == id));
+            return View(_context.Rooms.Find(id));
         }
 
         // POST: RoomController/Delete/5
@@ -74,8 +76,9 @@ namespace HotelBooking.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, Room room)
         {
-            Room RoomToDelete = list.FirstOrDefault(x => x.RoomID == id);
-            list.Remove(RoomToDelete);
+            var RoomToDelete = _context.Rooms.Find(id);
+            _context.Rooms.Remove(RoomToDelete);
+            _context.SaveChanges();
 
             return RedirectToAction("Index");
         }

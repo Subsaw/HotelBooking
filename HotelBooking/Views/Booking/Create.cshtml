@@ -1,0 +1,94 @@
+﻿@model HotelBooking.Models.Booking
+
+@{
+    ViewData["Title"] = "Booking";
+}
+@{
+    var roomId = ViewBag.roomID;
+    var roomNumber = ViewBag.roomNumber;
+}
+
+<h1>Booking</h1>
+<h4>Room @roomNumber</h4>
+
+@using (Html.BeginForm("Create", "Booking", FormMethod.Post, new { id = "bookingForm"}))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.RoomID)
+            <div class="form-group">
+                <label asp-for="GuestName" class="control-label"></label>
+                <input asp-for="GuestName" class="form-control" />
+                <span asp-validation-for="GuestName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CheckInDate" class="control-label"></label>
+                <input type="date" asp-for="CheckInDate" class="form-control" />
+                <span asp-validation-for="CheckInDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CheckOutDate" class="control-label"></label>
+                <input type="date" asp-for="CheckOutDate" class="form-control" />
+                <span asp-validation-for="CheckOutDate" class="text-danger"></span>
+            </div>
+            @*<div class="form-group">
+                <label asp-for="TotalPrice" class="control-label"></label>
+                <input asp-for="TotalPrice" class="form-control" />
+                <span asp-validation-for="TotalPrice" class="text-danger"></span>
+            </div>*@
+            <button type="submit" class="btn btn-primary">Book</button>
+
+            <div id="formError" class="alert alert-danger" style="display: none;">
+            </div>
+}
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+
+        function handleFormSubmit(event){
+            event.preventDefault();
+
+            var checkInDate = new Date(document.getElementById('checkInDate').value);
+            var checkOutDate = new Date(document.getElementById('checkOutDate').value);
+            var now = new Date();
+
+            var formErrorDiv = $('#formError');
+            formErrorDiv.hide().text('');
+
+            if (checkOutDate <= checkInDate) {
+                formErrorDiv.text("Check-out date must be later than check-in date.").show();
+                return;
+            }
+            
+            if (checkInDate < now || checkOutDate < now) {
+                formErrorDiv.text("Booking dates must be in the future.").show();
+                return;
+            }
+
+            var roomId = @ViewBag.RoomID;
+            var checkInDateISO = checkInDate.toISOString();
+            var checkOutDateISO = checkOutDate.toISOString();
+
+            $.get('@Url.Action("CheckForOverlap", "Reservation")', { roomId: roomId, checkInDate: checkInDateISO, checkOutDate: checkOutDateISO})
+                .done(function (isOverlapping) {
+                    if (isOverlapping) {
+                        formErrorDiv.text('There is already a booking for the selected room in this time period.').show();
+                    } else {
+                        document.getElementById('bookingForm').removeEventListener('submit', handleFormSubmit);
+                        document.getElementById('bookingForm').submit();
+                    }
+                })
+                .fail(function () {
+                    formErrorDiv.text('Error checking for booking overlap. Please try again.').show();
+                });
+        }
+
+        document.getElementById('bookingForm').addEventListener('submit', handleFormSubmit);
+
+        });
+    </script>
+}

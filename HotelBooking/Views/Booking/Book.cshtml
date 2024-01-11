@@ -1,0 +1,49 @@
+﻿@model IEnumerable<HotelBooking.Models.Booking>
+
+@{
+    ViewData["Title"] = "Booking";
+}
+@{
+    var roomId = ViewBag.roomID;
+    var roomNumber = ViewBag.roomNumber;
+}
+
+<h1>Room @ViewBag.RoomNumber</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.BookingDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckInDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckOutDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.BookingDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CheckInDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CheckOutDate)
+            </td>
+            @*<td>
+                <a asp-action="Edit" asp-route-id="@item.BookingID" class="btn btn-warning">Edit</a>
+                <a asp-action="Details" asp-route-id="@item.BookingID">Details</a>
+                <a asp-action="Delete" asp-route-id="@item.BookingID">Delete</a>
+            </td>*@
+        </tr>
+}
+    </tbody>
+</table>
+@Html.ActionLink("Create", "Create", new { roomId = roomId, roomNumber = roomNumber}, new { @class = "btn btn-success" })
