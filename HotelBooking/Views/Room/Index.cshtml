@@ -4,12 +4,19 @@
     ViewData["Title"] = "Rooms";
 }
 
+@{
+    var isAdmin = User.IsInRole("Admin");
+}
+
 <h1>Rooms</h1>
 <h2>Check upcomming events @Html.ActionLink("here", "Index", "Activityevent")</h2>
 
-<p>
-    <a asp-action="Create" class="btn btn-success">Create New</a>
-</p>
+@if(isAdmin){
+    <p>
+        <a asp-action="Create" class="btn btn-success">Create New</a>
+    </p>
+}
+
 <table class="table">
     <thead>
         <tr>
@@ -41,12 +48,16 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PricePerNight)
+                @Html.DisplayFor(modelItem => item.PricePerNight) zł
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new {  id=item.RoomID  }, new { @class = "btn btn-warning"})
-                @Html.ActionLink("Details", "Details", new {  id=item.RoomID  }, new { @class = "btn btn-primary"})
-                @Html.ActionLink("Delete", "Delete", new {  id=item.RoomID  }, new { @class = "btn btn-danger"})
+                @if (isAdmin)
+                {
+                    @Html.ActionLink("Edit", "Edit", new {  id=item.RoomID  }, new { @class = "btn btn-warning"})
+                    @Html.ActionLink("Details", "Details", new {  id=item.RoomID  }, new { @class = "btn btn-primary"})
+                    @Html.ActionLink("Delete", "Delete", new {  id=item.RoomID  }, new { @class = "btn btn-danger"})
+                        
+                }
                 @Html.ActionLink("Book", "Book", "Booking", new { roomID = item.RoomID, roomNumber = item.RoomNumber}, new { @class = "btn btn-success"})
             </td>
         </tr>

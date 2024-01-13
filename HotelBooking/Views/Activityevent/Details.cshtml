@@ -4,6 +4,10 @@
     ViewData["Title"] = "Details";
 }
 
+@{
+    var isAdmin = User.IsInRole("Admin");
+}
+
 <h1>Details</h1>
 
 <div>
@@ -37,6 +41,8 @@
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new {  id = Model.ActivityID  }) |
-    <a asp-action="Index">Back to List</a>
+    @if(isAdmin){
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ActivityID });
+    }
+    <a class="btn btn-secondary" asp-action="Index">Back to List</a>
 </div>

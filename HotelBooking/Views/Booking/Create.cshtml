@@ -69,26 +69,6 @@
                 return;
             }
 
-            var roomId = @ViewBag.RoomID;
-            var checkInDateISO = checkInDate.toISOString();
-            var checkOutDateISO = checkOutDate.toISOString();
-
-            $.get('@Url.Action("CheckForOverlap", "Reservation")', { roomId: roomId, checkInDate: checkInDateISO, checkOutDate: checkOutDateISO})
-                .done(function (isOverlapping) {
-                    if (isOverlapping) {
-                        formErrorDiv.text('There is already a booking for the selected room in this time period.').show();
-                    } else {
-                        document.getElementById('bookingForm').removeEventListener('submit', handleFormSubmit);
-                        document.getElementById('bookingForm').submit();
-                    }
-                })
-                .fail(function () {
-                    formErrorDiv.text('Error checking for booking overlap. Please try again.').show();
-                });
-        }
-
-        document.getElementById('bookingForm').addEventListener('submit', handleFormSubmit);
-
         });
     </script>
 }

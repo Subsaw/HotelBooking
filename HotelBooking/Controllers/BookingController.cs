@@ -1,6 +1,8 @@
 ﻿using HotelBooking.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 
 namespace HotelBooking.Controllers
@@ -16,11 +18,13 @@ namespace HotelBooking.Controllers
         }
 
         // GET: Booking
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             return View(_context.Bookings);
         }
 
+        [Authorize]
         public IActionResult Book(int roomId, string roomNumber)
         {
             ViewBag.RoomId = roomId;
@@ -33,6 +37,7 @@ namespace HotelBooking.Controllers
             return View(bookingsForRoom);
         }
 
+        [Authorize]
         public ActionResult Create(int roomID, string roomNumber)
         {
             ViewBag.RoomID = roomID;
@@ -49,6 +54,7 @@ namespace HotelBooking.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Booking booking)
         {

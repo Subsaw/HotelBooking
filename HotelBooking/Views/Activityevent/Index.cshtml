@@ -4,11 +4,17 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+@{
+    var isAdmin = User.IsInRole("Admin");
+}
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<h1>All Events</h1>
+
+@if(isAdmin){
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -43,9 +49,12 @@
                 @Html.DisplayFor(modelItem => item.Price) zł
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new {  id=item.ActivityID }) |
-                @Html.ActionLink("Details", "Details", new {  id=item.ActivityID  }) |
-                @Html.ActionLink("Delete", "Delete", new {  id=item.ActivityID  })
+                @if(isAdmin){
+                    @Html.ActionLink("Edit", "Edit", new {  id=item.ActivityID })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ActivityID })
+                }
+                    @Html.ActionLink("Details", "Details", new { id = item.ActivityID })
+                
             </td>
         </tr>
 }

@@ -1,7 +1,9 @@
 ﻿using HotelBooking.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using System.Data;
 using System.Diagnostics;
 
 namespace HotelBooking.Controllers
@@ -27,6 +29,7 @@ namespace HotelBooking.Controllers
         }
 
         // GET: RoomController/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View();
@@ -34,6 +37,7 @@ namespace HotelBooking.Controllers
 
         // POST: RoomController/Create
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Room room)
         {
@@ -43,6 +47,7 @@ namespace HotelBooking.Controllers
         }
 
         // GET: RoomController/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int id)
         {
             return View(_context.Rooms.Find(id));
@@ -50,6 +55,7 @@ namespace HotelBooking.Controllers
 
         // POST: RoomController/Edit/5
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, Room room)
         {
@@ -66,6 +72,7 @@ namespace HotelBooking.Controllers
         }
 
         // GET: RoomController/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int id)
         {
             return View(_context.Rooms.Find(id));
@@ -73,6 +80,7 @@ namespace HotelBooking.Controllers
 
         // POST: RoomController/Delete/5
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, Room room)
         {

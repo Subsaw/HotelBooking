@@ -1,4 +1,5 @@
 ﻿using HotelBooking.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,6 +29,7 @@ namespace HotelBooking.Controllers
         }
 
         // GET: ActivityController/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View();
@@ -35,6 +37,7 @@ namespace HotelBooking.Controllers
 
         // POST: ActivityController/Create
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Activityevent activityevents)
         {
@@ -44,6 +47,7 @@ namespace HotelBooking.Controllers
         }
 
         // GET: ActivityController/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int id)
         {
             return View(_context.Activityevents.Find(id));
@@ -51,6 +55,7 @@ namespace HotelBooking.Controllers
 
         // POST: ActivityController/Edit/5
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, Activityevent activity)
         {
@@ -67,6 +72,7 @@ namespace HotelBooking.Controllers
         }
 
         // GET: ActivityController/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int id)
         {
             return View(_context.Activityevents.Find(id));
@@ -74,6 +80,7 @@ namespace HotelBooking.Controllers
 
         // POST: ActivityController/Delete/5
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, Activityevent activity)
         {
