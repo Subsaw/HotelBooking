@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Git Hub\\HotelBooking\\HotelBooking\\HotelBooking.csproj": {}
+    "D:\\Git Hub\\HotelBooking\\HotelBooking\\HotelBooking\\HotelBooking.csproj": {}
   },
   "projects": {
-    "D:\\Git Hub\\HotelBooking\\HotelBooking\\HotelBooking.csproj": {
+    "D:\\Git Hub\\HotelBooking\\HotelBooking\\HotelBooking\\HotelBooking.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Git Hub\\HotelBooking\\HotelBooking\\HotelBooking.csproj",
+        "projectUniqueName": "D:\\Git Hub\\HotelBooking\\HotelBooking\\HotelBooking\\HotelBooking.csproj",
         "projectName": "HotelBooking",
-        "projectPath": "D:\\Git Hub\\HotelBooking\\HotelBooking\\HotelBooking.csproj",
+        "projectPath": "D:\\Git Hub\\HotelBooking\\HotelBooking\\HotelBooking\\HotelBooking.csproj",
         "packagesPath": "C:\\Users\\tward\\.nuget\\packages\\",
-        "outputPath": "D:\\Git Hub\\HotelBooking\\HotelBooking\\obj\\",
+        "outputPath": "D:\\Git Hub\\HotelBooking\\HotelBooking\\HotelBooking\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\tward\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,6 +40,14 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.23, )"
+            },
+            "Microsoft.AspNetCore.Identity.UI": {
+              "target": "Package",
+              "version": "[6.0.23, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[6.0.25, )"

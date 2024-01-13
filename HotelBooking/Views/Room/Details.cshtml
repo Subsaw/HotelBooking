@@ -43,7 +43,7 @@
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new {  id = Model.RoomID }, new { @class = "btn btn-warning"})
+    @Html.ActionLink("Edit", "Edit", new {  roomId = Model.RoomID }, new { @class = "btn btn-warning"})
     <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-    @Html.ActionLink("Book", "Book", "Booking", new { id = @Model.RoomID, roomNumber = @Model.RoomNumber}, new { @class = "btn btn-success"})
+    @Html.ActionLink("Book", "Book", "Booking", new { roomId = @Model.RoomID, roomNumber = @Model.RoomNumber}, new { @class = "btn btn-success"})
 </div>
