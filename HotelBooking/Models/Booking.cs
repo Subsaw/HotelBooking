@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using HotelBooking.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace HotelBooking.Models
 {
@@ -12,9 +13,10 @@ namespace HotelBooking.Models
 
         [ForeignKey("RoomID")]
         public int RoomID { get; set; }
+        public Room? Room { get; set; }
 
         [Column(TypeName = "varchar(255)")]
-        public string GuestName { get; set; }
+        public string? GuestName { get; set; }
 
         [Column(TypeName = "datetime")]
         public DateTime BookingDate { get; set; }
@@ -27,8 +29,10 @@ namespace HotelBooking.Models
         [CustomValidation(typeof(Booking), nameof(ValidateCheckOutDate))]
         public DateTime CheckOutDate { get; set; }
 
-        //[Column(TypeName = "int")]
-        //public int TotalPrice { get; set; }
+        public string? UserId { get; set; }
+
+        [ForeignKey("UserId")]
+        public IdentityUser? User { get; set; }
 
         public static ValidationResult ValidateCheckInDate(DateTime checkInDate)
         {

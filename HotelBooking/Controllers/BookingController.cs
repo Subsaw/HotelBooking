@@ -1,5 +1,6 @@
 ﻿using HotelBooking.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
@@ -10,11 +11,13 @@ namespace HotelBooking.Controllers
     public class BookingController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
 
-        public BookingController(AppDbContext context)
+        public BookingController(AppDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Booking
@@ -25,14 +28,15 @@ namespace HotelBooking.Controllers
         }
 
         [Authorize]
-        public IActionResult Book(int roomId, string roomNumber)
+        public async Task<IActionResult> Book(int roomId, string roomNumber)
         {
             ViewBag.RoomId = roomId;
             ViewBag.RoomNumber = roomNumber;
 
-            var bookingsForRoom = _context.Bookings
+            var bookingsForRoom = await _context.Bookings
+                .Include(b => b.Room)
                 .Where(b => b.RoomID == roomId)
-                .ToList();
+                .ToListAsync();
 
             return View(bookingsForRoom);
         }
@@ -56,13 +60,16 @@ namespace HotelBooking.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Booking booking)
+        public async Task<ActionResult> Create(Booking booking)
         {
             int roomID = booking.RoomID;
             var room = _context.Rooms.FirstOrDefault(r => r.RoomID == roomID);
             string roomNumber = room.RoomNumber;
 
             booking.BookingDate = DateTime.Now;
+            booking.GuestName = _userManager.GetUserName(User);
+            booking.UserId = _userManager.GetUserId(User);
+            booking.Room = room;
             
 
             bool isBooked = _context.Bookings.Any(b => b.RoomID == roomID && !(b.CheckInDate >= booking.CheckOutDate || b.CheckOutDate <= booking.CheckInDate));
@@ -76,24 +83,27 @@ namespace HotelBooking.Controllers
             if (ModelState.IsValid)
             {
                 _context.Bookings.Add(booking);
-                _context.SaveChanges();
-                return RedirectToAction("Book", new { roomID = roomID, roomNumber = roomNumber});
+                await _context.SaveChangesAsync();
+                return RedirectToAction("MyBookings");
             }
             else
             {
-                foreach (var state in ModelState)
-                {
-                    foreach (var error in state.Value.Errors)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Key: {state.Key}, Error: {error.ErrorMessage}");
-                    }
-                }
-
                 ViewBag.RoomID = roomID;
                 ViewBag.RoomNumber = roomNumber;
 
                 return View(booking);
             }
+        }
+
+        [Authorize]
+        public async Task<IActionResult> MyBookings()
+        {
+            var userId = _userManager.GetUserId(User);
+            var bookings = await _context.Bookings
+                .Where(b => b.UserId == userId)
+                .ToListAsync();
+
+            return View(bookings);
         }
 
         [HttpGet]

@@ -54,10 +54,10 @@
                 @if (isAdmin)
                 {
                     @Html.ActionLink("Edit", "Edit", new {  id=item.RoomID  }, new { @class = "btn btn-warning"})
-                    @Html.ActionLink("Details", "Details", new {  id=item.RoomID  }, new { @class = "btn btn-primary"})
                     @Html.ActionLink("Delete", "Delete", new {  id=item.RoomID  }, new { @class = "btn btn-danger"})
                         
                 }
+                @Html.ActionLink("Details", "Details", new {  id=item.RoomID  }, new { @class = "btn btn-primary"})
                 @Html.ActionLink("Book", "Book", "Booking", new { roomID = item.RoomID, roomNumber = item.RoomNumber}, new { @class = "btn btn-success"})
             </td>
         </tr>
