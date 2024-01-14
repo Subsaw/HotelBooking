@@ -1,7 +1,6 @@
 using HotelBooking.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using HotelBooking.Data;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 
 namespace Rooms
